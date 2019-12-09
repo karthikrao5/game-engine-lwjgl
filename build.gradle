@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 apply plugin: 'java'
 apply plugin: 'application'
 
@@ -7,9 +9,7 @@ project.ext.lwjglNatives = "natives-macos"
 repositories {
 	mavenCentral()
 }
-
-mainClassName = 'com.kraostudio.HelloWorld'
-applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
+mainClassName = 'com.pantheonstudios.GameInit'
 sourceSets {
 	main {
 		java {
@@ -23,6 +23,24 @@ sourceSets {
 		}
 	}
 }
+
+switch (OperatingSystem.current()) {
+	case OperatingSystem.LINUX:
+		def osArch = System.getProperty("os.arch")
+		project.ext.lwjglNatives = osArch.startsWith("arm") || osArch.startsWith("aarch64")
+				? "natives-linux-${osArch.contains("64") || osArch.startsWith("armv8") ? "arm64" : "arm32"}"
+				: "natives-linux"
+		break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos"
+		break
+}
+
+task appArgs {
+	dependsOn run
+	if (lwjglNatives == "natives-macos") applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
+}
+
 dependencies {
 	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
@@ -47,7 +65,7 @@ dependencies {
 	runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
 	runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
-	runtimeOnly "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
+	if (lwjglNatives == "natives-macos") runtimeOnly "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
 }
 
 
