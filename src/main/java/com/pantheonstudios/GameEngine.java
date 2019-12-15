@@ -1,45 +1,38 @@
 package com.pantheonstudios;
 
-import org.lwjgl.*;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
+public class GameEngine implements Runnable {
 
-import java.nio.*;
-
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.*;
-import static org.lwjgl.system.MemoryUtil.*;
-
-public class GameInit {
-
-    // The window handle
     private Window window;
     private Renderer renderer;
+    private final GameLogic gameLogic;
+
     private static int fps;
     private static float framerate = 200;
     private static float frameTime = 1.0f / framerate;
 
-
-    public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-        window = new Window("Sandbox", 1280, 720, true);
+    public GameEngine(String windowTitle, int width, int height, boolean vSync, GameLogic gameLogic) {
+        window = new Window(windowTitle, width, height, vSync);
         renderer = new Renderer();
-
-        init();
-        loop();
-
-        window.closeWindow();
+        this.gameLogic = gameLogic;
     }
 
-    private void init() {
+    @Override
+    public void run() {
+        try {
+            init();
+            gameLoop();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void init() throws Exception {
         window.init();
         renderer.init();
+        gameLogic.init();
     }
 
-    private void loop() {
+    public void gameLoop() {
         boolean isRunning = true;
 
         int frames = 0;
@@ -58,9 +51,9 @@ public class GameInit {
             unprocessedTime += passedTime / (double) Constants.NANOSECOND;
             frameCounter += passedTime;
 
+            input();
 
             while (unprocessedTime > frameTime) {
-
                 render = true;
                 unprocessedTime -= frameTime;
 
@@ -72,12 +65,15 @@ public class GameInit {
                     frames = 0;
                     frameCounter = 0;
                 }
+
+                update(frames);
             }
+
             if (render) {
-                renderer.clear();
-                window.update();
+                render();
 
                 frames++;
+
             } else {
                 try {
                     Thread.sleep(10);
@@ -88,7 +84,16 @@ public class GameInit {
         }
     }
 
-    public static void main(String[] args) {
-        new GameInit().run();
+    public void input() {
+        gameLogic.input(window);
+    }
+
+    public void update(float interval) {
+        gameLogic.update(interval);
+    }
+
+    public void render() {
+        gameLogic.render(window);
+        window.update();
     }
 }

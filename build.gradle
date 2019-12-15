@@ -9,7 +9,7 @@ project.ext.lwjglNatives = "natives-macos"
 repositories {
 	mavenCentral()
 }
-mainClassName = 'com.pantheonstudios.GameInit'
+mainClassName = 'com.pantheonstudios.Main'
 sourceSets {
 	main {
 		java {
