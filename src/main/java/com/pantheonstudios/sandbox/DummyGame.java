@@ -1,4 +1,7 @@
-package com.pantheonstudios;
+package com.pantheonstudios.sandbox;
+
+import com.pantheonstudios.engine.GameLogic;
+import com.pantheonstudios.engine.Window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
@@ -23,9 +26,9 @@ public class DummyGame implements GameLogic {
 
     @Override
     public void input(Window window) {
-        if ( window.isKeyPressed(GLFW_KEY_UP) ) {
+        if (window.isKeyPressed(GLFW_KEY_UP)) {
             direction = 1;
-        } else if ( window.isKeyPressed(GLFW_KEY_DOWN) ) {
+        } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
             direction = -1;
         } else {
             direction = 0;
@@ -37,19 +40,19 @@ public class DummyGame implements GameLogic {
         color += direction * 0.01f;
         if (color > 1) {
             color = 1.0f;
-        } else if ( color < 0 ) {
+        } else if (color < 0) {
             color = 0.0f;
         }
     }
 
     @Override
     public void render(Window window) {
-        if ( window.isResized() ) {
-            glViewport(0, 0, window.getWidth(), window.getHeight());
-            window.setResized(false);
-        }
-
         window.setClearColor(color, color, color, 0.0f);
-        renderer.clear();
+        renderer.render(window);
+    }
+
+    @Override
+    public void cleanup() {
+        renderer.cleanup();
     }
 }

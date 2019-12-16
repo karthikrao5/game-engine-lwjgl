@@ -1,4 +1,4 @@
-package com.pantheonstudios;
+package com.pantheonstudios.engine;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -63,10 +63,12 @@ public class Window {
             this.setResized(true);
         });
 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        // Setup a key callback.
+        // It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+                // We will detect this in the rendering loop
+                glfwSetWindowShouldClose(window, true);
             }
         });
 
@@ -90,7 +92,6 @@ public class Window {
         // Make the window visible
         glfwShowWindow(windowHandle);
 
-        GL.createCapabilities();
         printGLDetails();
 
         // Set the clear color
@@ -166,12 +167,18 @@ public class Window {
         // bindings available for use.
         GL.createCapabilities();
 
-        System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION) + " bytes");
-        System.out.println("Max Geometry Uniform Blocks: " + GL31.GL_MAX_GEOMETRY_UNIFORM_BLOCKS + " bytes");
-        System.out.println("Max Geometry Shader Invocations: " + GL40.GL_MAX_GEOMETRY_SHADER_INVOCATIONS + " bytes");
-        System.out.println("Max Uniform Buffer Bindings: " + GL31.GL_MAX_UNIFORM_BUFFER_BINDINGS + " bytes");
-        System.out.println("Max Uniform Block Size: " + GL31.GL_MAX_UNIFORM_BLOCK_SIZE + " bytes");
-        System.out.println("Max SSBO Block Size: " + GL43.GL_MAX_SHADER_STORAGE_BLOCK_SIZE + " bytes");
+        System.out.println("OpenGL version: "
+                + GL11.glGetString(GL11.GL_VERSION) + " bytes");
+        System.out.println("Max Geometry Uniform Blocks: "
+                + GL31.GL_MAX_GEOMETRY_UNIFORM_BLOCKS + " bytes");
+        System.out.println("Max Geometry Shader Invocations: "
+                + GL40.GL_MAX_GEOMETRY_SHADER_INVOCATIONS + " bytes");
+        System.out.println("Max Uniform Buffer Bindings: "
+                + GL31.GL_MAX_UNIFORM_BUFFER_BINDINGS + " bytes");
+        System.out.println("Max Uniform Block Size: "
+                + GL31.GL_MAX_UNIFORM_BLOCK_SIZE + " bytes");
+        System.out.println("Max SSBO Block Size: "
+                + GL43.GL_MAX_SHADER_STORAGE_BLOCK_SIZE + " bytes");
 //        System.out.println("OpenGL Extensions supported by your card : ");
 //        String extensions = glGetString(GL_EXTENSIONS);
 //        String[] extArr = extensions.split("\\ ");

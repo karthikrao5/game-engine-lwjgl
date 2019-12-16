@@ -1,4 +1,4 @@
-package com.pantheonstudios;
+package com.pantheonstudios.engine;
 
 public interface GameLogic {
     void init() throws Exception;
@@ -8,4 +8,6 @@ public interface GameLogic {
     void update(float interval);
 
     void render(Window window);
+
+    void cleanup();
 }

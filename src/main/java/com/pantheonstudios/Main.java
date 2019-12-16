@@ -1,6 +1,8 @@
 package com.pantheonstudios;
 
-import org.lwjgl.*;
+import com.pantheonstudios.engine.GameEngine;
+import com.pantheonstudios.engine.GameLogic;
+import com.pantheonstudios.sandbox.DummyGame;
 
 public class Main {
 

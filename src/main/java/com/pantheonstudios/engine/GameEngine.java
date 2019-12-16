@@ -1,9 +1,10 @@
-package com.pantheonstudios;
+package com.pantheonstudios.engine;
+
+import com.pantheonstudios.sandbox.Renderer;
 
 public class GameEngine implements Runnable {
 
     private Window window;
-    private Renderer renderer;
     private final GameLogic gameLogic;
 
     private static int fps;
@@ -12,7 +13,6 @@ public class GameEngine implements Runnable {
 
     public GameEngine(String windowTitle, int width, int height, boolean vSync, GameLogic gameLogic) {
         window = new Window(windowTitle, width, height, vSync);
-        renderer = new Renderer();
         this.gameLogic = gameLogic;
     }
 
@@ -21,14 +21,16 @@ public class GameEngine implements Runnable {
         try {
             init();
             gameLoop();
+            window.closeWindow();
         } catch (Exception ex) {
             ex.printStackTrace();
+        } finally {
+            gameLogic.cleanup();
         }
     }
 
     public void init() throws Exception {
         window.init();
-        renderer.init();
         gameLogic.init();
     }
 

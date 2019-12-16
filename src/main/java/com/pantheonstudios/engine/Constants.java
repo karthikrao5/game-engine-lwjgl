@@ -1,4 +1,4 @@
-package com.pantheonstudios;
+package com.pantheonstudios.engine;
 
 public class Constants {
 
